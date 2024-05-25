@@ -59,11 +59,17 @@ typedef uint64_t u64;
 u64 htonu64(u64 val);
 u64 ntohu64(u64 val);
 
+void serialize_i16(u16 var, i8* buff, size_t size);
+void serialize_i32(u32 var, i8* buff, size_t size);
+void serialize_i64(u64 var, i8* buff, size_t size);
 void serialize_u16(u16 var, i8* buff, size_t size);
 void serialize_u32(u32 var, i8* buff, size_t size);
 void serialize_u64(u64 var, i8* buff, size_t size);
 void serialize_struct(void* data, size_t data_size, i8* buff, size_t buff_size);
 // float
+i16 deserialize_u16(i8* buff, size_t size);
+i32 deserialize_u32(i8* buff, size_t size);
+i64 deserialize_u64(i8* buff, size_t size);
 u16 deserialize_u16(i8* buff, size_t size);
 u32 deserialize_u32(i8* buff, size_t size);
 u64 deserialize_u64(i8* buff, size_t size);
