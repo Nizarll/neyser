@@ -11,7 +11,6 @@
 #ifndef NEYSER_H
 #define NEYSER_H
 
-#include "ansi.h"
 #include <stdint.h>
 #include <math.h>
 #include <stdio.h>
@@ -25,6 +24,43 @@
 #define __BYTE_ORDER__ __ORDER_BIG_ENDIAN__
 #endif
 #endif
+
+#define ANSI_COLOR_RESET             "\x1b[0m"
+#define ANSI_COLOR_BLACK             "\x1b[30m"
+#define ANSI_COLOR_RED               "\x1b[31m"
+#define ANSI_COLOR_GREEN             "\x1b[32m"
+#define ANSI_COLOR_YELLOW            "\x1b[33m"
+#define ANSI_COLOR_BLUE              "\x1b[34m"
+#define ANSI_COLOR_MAGENTA           "\x1b[35m"
+#define ANSI_COLOR_CYAN              "\x1b[36m"
+#define ANSI_COLOR_WHITE             "\x1b[37m"
+#define ANSI_COLOR_BRIGHT_BLACK      "\x1b[30;1m"
+#define ANSI_COLOR_BRIGHT_RED        "\x1b[31;1m"
+#define ANSI_COLOR_BRIGHT_GREEN      "\x1b[32;1m"
+#define ANSI_COLOR_BRIGHT_YELLOW     "\x1b[33;1m"
+#define ANSI_COLOR_BRIGHT_BLUE       "\x1b[34;1m"
+#define ANSI_COLOR_BRIGHT_MAGENTA    "\x1b[35;1m"
+#define ANSI_COLOR_BRIGHT_CYAN       "\x1b[36;1m"
+#define ANSI_COLOR_BRIGHT_WHITE      "\x1b[37;1m"
+#define ANSI_BG_COLOR_BLACK          "\x1b[40m"
+#define ANSI_BG_COLOR_RED            "\x1b[41m"
+#define ANSI_BG_COLOR_GREEN          "\x1b[42m"
+#define ANSI_BG_COLOR_YELLOW         "\x1b[43m"
+#define ANSI_BG_COLOR_BLUE           "\x1b[44m"
+#define ANSI_BG_COLOR_MAGENTA        "\x1b[45m"
+#define ANSI_BG_COLOR_CYAN           "\x1b[46m"
+#define ANSI_BG_COLOR_WHITE          "\x1b[47m"
+#define ANSI_BG_COLOR_BRIGHT_BLACK   "\x1b[40;1m"
+#define ANSI_BG_COLOR_BRIGHT_RED     "\x1b[41;1m"
+#define ANSI_BG_COLOR_BRIGHT_GREEN   "\x1b[42;1m"
+#define ANSI_BG_COLOR_BRIGHT_YELLOW  "\x1b[43;1m"
+#define ANSI_BG_COLOR_BRIGHT_BLUE    "\x1b[44;1m"
+#define ANSI_BG_COLOR_BRIGHT_MAGENTA "\x1b[45;1m"
+#define ANSI_BG_COLOR_BRIGHT_CYAN    "\x1b[46;1m"
+#define ANSI_BG_COLOR_BRIGHT_WHITE   "\x1b[47;1m"
+#define ANSI_STYLE_BOLD              "\x1b[1m" 
+#define ANSI_STYLE_UNDERLINE         "\x1b[4m"
+#define ANSI_STYLE_REVERSED          "\x1b[7m"
 
 #define LOG_OKAY(msg, ...)                                                     \
   printf(ANSI_COLOR_GREEN "[✓] | " msg ANSI_COLOR_RESET "\n", ##__VA_ARGS__)
@@ -83,80 +119,5 @@ typedef struct {
 	u8 exp;    // 8 bit float exponent
 	u32 mant; // 24 bit float mantissa
 }f_pack_t;
-
-// IEE-754 floating single-precision floating number
-// serialize float using its IEE-754 format
-//
-//
-
-u16 deserialize_u16(i8* buff, size_t size) {
-	if (size < 2) LOG_ERR("error! could not deserialize u16!");
-	return (u16) *buff | *(buff + 1);
-}
-
-u32 deserialize_u32(i8* buff, size_t size) {
-	if (size < 4) LOG_ERR("error! could not deserialize u16!");
-	return (u32) (deserialize_u16(buff, size) | ((u32) deserialize_buff(buff + 2, size - 2)) << 2 * byte);
-}
-
-u64 deserialize_u64(i8* buff, size_t size)  {
-	if (size < 8) LOG_ERR("error! could not deserialize u16!");
-	return (u64) (deserialize_u32(buff, size) | ((u32) deserialize_buff(buff + 4, size - 4)) << 4 * byte);
-}
-
-float deserialize_float(i8* buff, size_t size) {
-	if (size < 6) LOG_ERR("error! could not deserialize u16!");
-	return (ldexpf((float)(deserialize_u32(buff + 2, size - 2) / powf(2, 24)), *(buff + 1));
-}
-
-void serialize_float(float var, i8* buff, size_t size) {
-	f_pack_t pack = {.sign = var > .0f ? 0 : 1};
-	pack.mant = (u32)(frexpf(var, &pack.exp) * pow(2, 24));
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-	serialize_u32(pack.mant, buff, size);
-	*(buff + 4) = pack.sign;
-	*(buff + 5) = pack.exp;
-#else
-	*buff = pack.sign;
-	*(buff + 1) = pack.exp;
-	serialize_u32(pack.mant, buff + 2, size - 2);
-#endif
-}
-
-void serialize_u16(u16 var, i8* buff, size_t size) {
-	if (size < 2) 
-		LOG_ERR("could not serialize u16 !");
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-	*buff = (var & u16_half_sec) >> 8;
-	*(buff + 1) = var & u16_half_first;
-#else
-	*buff = var & u16_half_first;
-	*(buff + 1) = (var & u16_half_sec) >> 8;
-#endif
-}
-
-void serialize_u32(u32 var, i8* buff, size_t size) {
-	if (size < 4)
-		LOG_ERR("could not serialize u32 !");
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-	serialize_u16((u16)((var & u32_half_sec) >> (2 * byte)), buff, size);
-	serialize_u16((u16)(var & u32_half_first), buff + 2, size - 2);
-#else
-	serialize_u16((u16)(n_var & u32_half_first), buff, size);
-	serialize_u16((u16)((n_var & u32_half_sec) >> 16), buff + 2, size - 2);
-#endif
-}
-
-void serialize_u64(u64 var, i8* buff, size_t size) {
-	if (size < 8)
-		LOG_ERR("could not serialize u64 !");
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-	serialize_u32((u32)((var & u64_half_sec) >> (4 * byte)), buff, size);
-	serialize_u32((u32)(var & u64_half_first), buff + 2, size - 2);
-#else
-	serialize_u32((u32)(var & u64_half_first), buff, size);
-	serialize_u32((u32)(var & u32_half_sec) >> 32), buff + 2, size - 2);
-#endif 
-}
 
 #endif // NEYSER_H
