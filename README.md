@@ -1,4 +1,4 @@
-<img src = "https://github.com/Nizarll/neyser/blob/master/img/logo.png?raw=true" width="200" height ="45">
+<img src = "https://github.com/Nizarll/neyser/blob/master/img/logo.png?raw=true" width="200" height ="55">
 # Neyser an opensource C serialization library 
 
 neyser allows you to easilly serialize structs, fixed-sized integers and floats from the host \
