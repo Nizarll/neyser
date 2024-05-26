@@ -27,13 +27,15 @@ you can also serialize structs and deserialize them:
     int y;
   }
   
+  // not advised
+  struct blob deserialize_blob(i8* buff, size_t size) {
+    return *(struct blob *)buff;
+  }
+
   int main() {
     i8 buff[MAX_BUFF_LEN];
     struct blob my_blob = {0};
     serialize_struct(&my_blob, sizeof(my_blob), buff, sizeof(buff));
-  }
-  // not advised
-  struct blob deserialize_blob(i8* buff, size_t size) {
-    return *(struct blob *)buff;
+    return 0;
   }
 ```
