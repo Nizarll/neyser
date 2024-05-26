@@ -1,28 +1,32 @@
 /*
  * Neyser - OpenSource serialization library !
- * 
+ *
  * Description: Neyser is a collection of useful functions for networking, sockets, and serialization.
  * It is released under the MIT License, which means you are free to use, modify, and distribute it.
  *
- * Author: Nizar yatim 
+ * Author: Nizar yatim
  * Contact: forsubsofmy@gmail.com
  */
 
 #ifndef NEYSER_H
 #define NEYSER_H
 
+#include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
 #include <stdio.h>
 
-#ifdef MSC_VER
-#define __ORDER_LITTLE_ENDIAN__ 1234
-#define __ORDER_LITTLE_ENDIAN__ 4321
-#if REG_DWORD == REG_DWORD_LITTLE_ENDIAN
-#define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
-#else
-#define __BYTE_ORDER__ __ORDER_BIG_ENDIAN__
+#ifndef __ORDER_LITTLE_ENDIAN__
+  #define __ORDER_LITTLE_ENDIAN__ 1234
 #endif
+#ifndef __ORDER_LITTLE_ENDIAN__
+  #define __ORDER_LITTLE_ENDIAN__ 4321
+#endif
+
+#if defined(MSC_VER) && REG_DWORD == REG_DWORD_LITTLE_ENDIAN
+    #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+#else
+    #define __BYTE_ORDER__ __ORDER_BIG_ENDIAN__
 #endif
 
 #define ANSI_COLOR_RESET             "\x1b[0m"
@@ -58,7 +62,7 @@
 #define ANSI_BG_COLOR_BRIGHT_MAGENTA "\x1b[45;1m"
 #define ANSI_BG_COLOR_BRIGHT_CYAN    "\x1b[46;1m"
 #define ANSI_BG_COLOR_BRIGHT_WHITE   "\x1b[47;1m"
-#define ANSI_STYLE_BOLD              "\x1b[1m" 
+#define ANSI_STYLE_BOLD              "\x1b[1m"
 #define ANSI_STYLE_UNDERLINE         "\x1b[4m"
 #define ANSI_STYLE_REVERSED          "\x1b[7m"
 
@@ -84,7 +88,7 @@
 #define u32_half_sec   0xffff0000
 #define u64_half_first 0xffffffff
 
-#define u64_half_sec UINT64_C(u64_half_first) << 32
+#define u64_half_sec (UINT64_C(0xffffffff) << 32)
 
 typedef uint16_t i8;
 typedef uint16_t i16;
@@ -111,13 +115,13 @@ i64 deserialize_u64(i8* buff, size_t size);
 u16 deserialize_u16(i8* buff, size_t size);
 u32 deserialize_u32(i8* buff, size_t size);
 u64 deserialize_u64(i8* buff, size_t size);
-float serialize_float(float var, size_t size);
-char* derialize_struct(i8* buff, size_t size); // type-punning to return the base struct 
+float deserialize_float(i8* buff, size_t size);
+char* derialize_struct(i8* buff, size_t size); // type-punning to return the base struct
 
 typedef struct {
-	u8 sign;    // 1 bit float sign
-	u8 exp;    // 8 bit float exponent
-	u32 mant; // 24 bit float mantissa
+        u8 sign;    // 1 bit float sign
+        u8 exp;    // 8 bit float exponent
+        u32 mant; // 24 bit float mantissa
 }f_pack_t;
 
 #endif // NEYSER_H
