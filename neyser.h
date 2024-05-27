@@ -112,9 +112,9 @@ void serialize_u64(u64 var, i8* buff, size_t size);
 void serialize_float(float var, i8* buff, size_t size);
 void serialize_struct(void* data, size_t data_size, i8* buff, size_t buff_size);
 
-i16 deserialize_u16(i8* buff, size_t size);
-i32 deserialize_u32(i8* buff, size_t size);
-i64 deserialize_u64(i8* buff, size_t size);
+i16 deserialize_i16(i8* buff, size_t size);
+i32 deserialize_i32(i8* buff, size_t size);
+i64 deserialize_i64(i8* buff, size_t size);
 u16 deserialize_u16(i8* buff, size_t size);
 u32 deserialize_u32(i8* buff, size_t size);
 u64 deserialize_u64(i8* buff, size_t size);
