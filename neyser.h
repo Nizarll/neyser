@@ -19,14 +19,17 @@
 #ifndef __ORDER_LITTLE_ENDIAN__
   #define __ORDER_LITTLE_ENDIAN__ 1234
 #endif
-#ifndef __ORDER_LITTLE_ENDIAN__
-  #define __ORDER_LITTLE_ENDIAN__ 4321
+
+#ifndef __ORDER_BIG_ENDIAN__
+  #define __ORDER_BIG_ENDIAN__ 4321
 #endif
 
-#if defined(MSC_VER) && REG_DWORD == REG_DWORD_LITTLE_ENDIAN
+#if defined(MSC_VER)
+	#if REG_DWORD == REG_DWORD_LITTLE_ENDIAN
     #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
-#else
+	#else
     #define __BYTE_ORDER__ __ORDER_BIG_ENDIAN__
+	#endif
 #endif
 
 #define ANSI_COLOR_RESET             "\x1b[0m"
@@ -90,10 +93,10 @@
 
 #define u64_half_sec (UINT64_C(0xffffffff) << 32)
 
-typedef uint16_t i8;
-typedef uint16_t i16;
-typedef uint32_t i32;
-typedef uint64_t i64;
+typedef int16_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
 
 typedef uint16_t u8;
 typedef uint16_t u16;

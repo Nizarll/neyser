@@ -1,7 +1,8 @@
 #include "neyser.h"
+
 u16 deserialize_u16(i8* buff, size_t size) {
         if (size < 2) LOG_ERR("error! could not deserialize u16!");
-        return (u16) *(buff + 1) | (*buff << byte);
+        return (u16) (u16)(*(buff + 1)) | (u16) (*buff << byte);
 }
 
 u32 deserialize_u32(i8* buff, size_t size) {
@@ -15,13 +16,18 @@ u64 deserialize_u64(i8* buff, size_t size)  {
 }
 
 float deserialize_float(i8* buff, size_t size) {
+    u32 mant = deserialize_u32(buff, size);
+    i8 sign = (u8)(*(buff + 4)) ? -1 : 1;
+    u8 exp = (u8)(*(buff + 5));
+    printf("derialize_float:\n\tmant is %ld, exp is %d, sign is %d\n", mant, exp, sign);
         if (size < 6) LOG_ERR("error! could not deserialize u64!");
-        return (*(buff + 5) * ldexpf((float)(deserialize_u32(buff, size) / powf(2, 24)), *(buff + 4)));
+    return (float)(sign * ldexpf((float)((float)mant / pow(2, 24)), exp));
 }
 
 void serialize_float(float var, i8* buff, size_t size) {
         f_pack_t pack = {.sign = var > .0f ? 0 : 1};
         pack.mant = (u32)(frexpf(var, &pack.exp) * pow(2, 24));
+        printf("serialize_float:\n\tmant is %f, exp is %d, sign is %d\n", pack.mant, pack.exp, pack.sign);
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
         serialize_u32(pack.mant, buff, size);
         *(buff + 4) = pack.sign;
