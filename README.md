@@ -5,7 +5,12 @@
 neyser allows you to easilly serialize structs, fixed-sized integers and floats from the host \
 how to serialize: 
 
-*host machine* :
+**Todo**:\
+-Add fixed sized floats.\
+-Add serialization for signed integers.\
+-Serialization for mixed-endian and other endianesses.
+
+**host machine** :
 ```c
   u32 my_u32 = 3000;
   i8 buff[MAX_BUFF_LEN];
@@ -13,7 +18,7 @@ how to serialize:
   // send it over the network
 ```
 
-*receiver machine*:
+**receiver machine**:
 ```c
   i8 buff[MAX_BUFF_LEN];
   // receive bytes
@@ -40,8 +45,3 @@ you can also serialize structs and deserialize them:
     return 0;
   }
 ```
-
-**Todo**:\
--Add fixed sized floats.\
--Add serialization for signed integers.\
--Serialization for mixed-endian and other endianesses.
