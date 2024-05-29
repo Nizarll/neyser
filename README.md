@@ -42,6 +42,6 @@ you can also serialize structs and deserialize them:
 ```
 
 **Todo**:
--Add fixed sized floats
--Add serialization for signed integers
--Serialization for mixed-endian and other endianesses
+-Add fixed sized floats.\
+-Add serialization for signed integers.\
+-Serialization for mixed-endian and other endianesses.\
