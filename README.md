@@ -6,9 +6,9 @@ neyser allows you to easilly serialize structs, fixed-sized integers and floats 
 how to serialize: 
 
 **Todo**:\
--Add fixed sized floats.\
--Add serialization for signed integers.\
--Serialization for mixed-endian and other endianesses.
+- Add fixed sized floats.\
+- Add serialization for signed integers.\
+- Serialization for mixed-endian and other endianesses.
 
 **host machine** :
 ```c
