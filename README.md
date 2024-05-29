@@ -40,3 +40,8 @@ you can also serialize structs and deserialize them:
     return 0;
   }
 ```
+
+**Todo**:
+-Add fixed sized floats
+-Add serialization for signed integers
+-Serialization for mixed-endian and other endianesses
