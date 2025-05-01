@@ -7,8 +7,7 @@ how to serialize:
 
 **Todo**:
 - Add fixed sized floats.
-- Add serialization for signed integers.
-- Serialization for mixed-endian and other endianesses.
+- Add Serialization for big integers, and big doubles , big floats 
 
 **host machine** :
 ```c
@@ -25,23 +24,4 @@ how to serialize:
   u32 my_u32 = deserialize_u32(buff, size);
 ```
 
-you can also serialize structs and deserialize them:
-
-```c
-  struct blob {
-    int x;
-    int y;
-  }
-  
-  // not advised
-  struct blob deserialize_blob(i8* buff, size_t size) {
-    return *(struct blob *)buff;
-  }
-
-  int main() {
-    i8 buff[MAX_BUFF_LEN];
-    struct blob my_blob = {0};
-    serialize_struct(&my_blob, sizeof(my_blob), buff, sizeof(buff));
-    return 0;
-  }
 ```
