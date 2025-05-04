@@ -65,6 +65,12 @@
  {
  #endif
  
+  typedef enum {
+    SERIALIZATION_OK = 0,
+    SERIALIZATION_ERROR_BUFFER_TOO_SMALL = -1,
+    SERIALIZATION_ERROR_NULL_POINTER = -2
+  } serialization_result_t;
+
    typedef int16_t i8;
    typedef int16_t i16;
    typedef int32_t i32;
